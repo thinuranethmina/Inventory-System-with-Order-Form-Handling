@@ -1,0 +1,591 @@
+:root {
+    --theme-color-dark-blue: #005dc7;
+    --theme-color-blue: #0479ff;
+    --theme-color-blue-hover: #429aff;
+    --theme-color-light-blue: #D5eeff;
+    --theme-color-light-red: #ff4f55d5;
+    --theme-color-red: #da1921;
+    --theme-color-red-hover: #f4272e;
+    --theme-color-red-light-hover: #ffcfcf;
+    --card-shadow-1: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+i {
+    background-color: rgb(20, 0, 84) !important;
+}
+
+.rounded-4 {
+    border-radius: .6rem !important
+}
+
+.rounded-5 {
+    border-radius: .8rem !important
+}
+
+.text-end {
+    text-align: right;
+}
+
+.text-start {
+    text-align: left;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.width-min-content {
+    width: min-content !important;
+}
+
+.width-fit-content {
+    width: fit-content !important;
+}
+
+.box-shadow {
+    box-shadow: var(--card-shadow-1);
+}
+
+.shadow-none {
+    box-shadow: none !important;
+}
+
+.form-text-1 {
+    color: rgb(71, 71, 71);
+}
+
+.form-control {
+    border: 1px solid rgb(178, 178, 178);
+    outline: none;
+    border-radius: 6px;
+}
+
+.form-control:focus {
+    border: 1px solid var(--theme-color-blue-hover);
+}
+
+.submit-btn {
+    background-color: var(--theme-color-blue);
+    border-radius: 6px;
+    color: white;
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+.submit-btn:focus,
+.submit-btn:active,
+.submit-btn:hover {
+    transition: all linear 0.3s;
+    background-color: black;
+    color: white;
+    outline: none;
+    border: none;
+}
+
+.submit-btn:focus {
+    box-shadow: 0 0 0 0.2rem rgba(90, 90, 90, 0.25);
+}
+
+.close-btn {
+    background-color: rgb(221, 221, 221);
+    border-radius: 6px;
+    color: black;
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+.close-btn:focus {
+    box-shadow: 0 0 0 0.2rem rgba(90, 90, 90, 0.25);
+}
+
+.close-btn:focus,
+.close-btn:active,
+.close-btn:hover {
+    transition: all linear 0.3s;
+    background-color: rgb(203, 203, 203);
+    color: black;
+    outline: none;
+    border: none;
+}
+
+.delete-btn {
+    background-color: rgb(235, 33, 33);
+    border-radius: 6px;
+    color: rgb(255, 255, 255);
+    outline: none;
+    border: none;
+    box-shadow: none;
+}
+
+.delete-btn:focus,
+.delete-btn:active,
+.delete-btn:hover {
+    transition: all linear 0.3s;
+    background-color: rgb(196, 12, 12);
+    color: white;
+    outline: none;
+    border: none;
+}
+
+.delete-btn:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.25);
+}
+
+.input-group-text-left {
+    background-color: #ebebeb !important;
+    border: 1px solid rgb(178, 178, 178);
+    outline: none;
+    border-radius: 0;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.input-group-text-right {
+    background-color: #ebebeb !important;
+    border: 1px solid rgb(178, 178, 178);
+    outline: none;
+    border-radius: 0;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.text-truncate-1 {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 1 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+}
+
+
+/*================================================================
+  INDEX CSS HERE
+  ================================================================*/
+
+.card-count {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.card-img {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.card-border {
+    border: 3px solid var(--theme-color-light-red);
+    height: 100%;
+}
+
+.overall-stock-card {
+    border: 5px solid var(--theme-color-blue);
+    height: 100%;
+}
+
+.stock-warning {
+    background-color: var(--theme-color-red-light-hover);
+}
+
+.stock-warning-blink {
+    animation: blink_border 1.5s infinite;
+    animation-fill-mode: both;
+}
+
+@keyframes blink_border {
+    0% {
+        border-color: rgb(255, 0, 0);
+    }
+
+    50% {
+        border-color: rgb(255, 169, 169);
+    }
+
+    100% {
+        border-color: rgb(255, 0, 0);
+    }
+}
+
+
+/*================================================================
+  TABLE CSS HERE
+  ================================================================*/
+
+table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    width: 100%;
+}
+
+table td,
+th {
+    padding: 8px 8px;
+    font-size: 13.5px;
+}
+
+table tr {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    height: 60px !important;
+    max-height: 60px !important;
+    min-height: 60px !important;
+}
+
+table td:nth-child(n) {
+    background-color: white;
+}
+
+table tr:nth-child(n) {
+    border-radius: 5px;
+}
+
+table tr:nth-child(n):hover {
+    scale: 1.02;
+    transition: all linear 0.2s;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 5px 10px;
+}
+
+table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #0099ff;
+    color: rgb(255, 255, 255);
+}
+
+td:first-child,
+th:first-child {
+    border-radius: 5px 0 0 5px;
+}
+
+td:last-child,
+th:last-child {
+    border-radius: 0 5px 5px 0;
+}
+
+table tr td .action-icon {
+    cursor: pointer;
+    height: 20px;
+}
+
+.table-main-image {
+    /* border-radius: 50%; */
+    max-height: 50px;
+    max-width: 50px;
+    object-fit: contain;
+    background-color: white;
+    box-shadow: var(--card-shadow-1);
+}
+
+.date-row {
+    border-bottom: 3px solid var(--theme-color-light-red);
+    border-radius: 5px !important;
+}
+
+.status {
+    min-width: 80px;
+    width: fit-content;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+.status.status-active {
+    background-color: rgb(0, 185, 22);
+    color: white;
+}
+
+.status.status-deactive {
+    background-color: rgb(219, 38, 10);
+    color: white;
+}
+
+
+/*================================================================
+  SETTINGS CSS HERE
+  ================================================================*/
+
+.settings-profile-img {
+    height: 200px;
+    width: 200px;
+}
+
+
+/*================================================================
+  ACTIVITY CSS HERE
+  ================================================================*/
+
+.new-notification-icon {
+    padding: 2px 4px;
+    border-radius: 4px;
+    color: white;
+    background-color: var(--theme-color-blue);
+    margin-right: 5px;
+    font-size: 12px;
+    animation: blinker 3s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0.1;
+    }
+}
+
+
+/*================================================================
+  MODAL CSS HERE
+  ================================================================*/
+
+.modal-1 {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 150px;
+    padding-bottom: 50px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgba(47, 144, 255, 0.432);
+    /* Black w/ opacity */
+}
+
+@media (min-width: 1025px) {
+    .modal-1 {
+        margin-left: 150px;
+    }
+}
+
+.modal-1.show-modal {
+    animation-name: animateHideToShow;
+    animation-duration: 1s
+}
+
+.modal-1.hide-modal {
+    animation-name: animateShowToHide;
+    animation-duration: 1s
+}
+
+@keyframes animateHideToShow {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes animateShowToHide {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+
+/* Modal Content */
+
+.modal--content {
+    position: relative;
+    background-color: #fefefe;
+}
+
+.modal--content.show-modal {
+    animation-name: animateTopToBottom;
+    animation-duration: 1s
+}
+
+.modal--content.hide-modal {
+    animation-name: animateBottomToTop;
+    animation-duration: 1s
+}
+
+
+/* Add Animation */
+
+@keyframes animateTopToBottom {
+    from {
+        top: -300px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+@keyframes animateBottomToTop {
+    from {
+        top: 0;
+        opacity: 1;
+    }
+
+    to {
+        top: -300px;
+        opacity: 0;
+    }
+}
+
+
+/* The Close Button */
+
+.close {
+    color: rgb(255, 255, 255);
+    font-size: 30px;
+    font-weight: bold;
+    background-color: var(--theme-color-blue);
+    border-radius: 50%;
+    text-align: center;
+    max-width: 48px;
+    min-width: 48px;
+    max-height: 48px;
+    min-height: 48px;
+}
+
+.close:hover,
+.close:focus {
+    color: #ffffff;
+    background-color: var(--theme-color-dark-blue);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal--header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px 16px 0 16px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
+}
+
+.modal--body {
+    padding: 2px 16px;
+    background-color: #fefefe;
+}
+
+.modal--footer {
+    border: none;
+    margin: 0;
+    padding: 10px 16px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+
+/*================================================================
+  CHOSEN LIBRARY CSS HERE
+  ================================================================*/
+
+.chosen-choices,
+.chosen-choices:focus,
+.chosen-choices:active {
+    border-color: rgb(205, 205, 205) !important;
+    color: black !important;
+    box-shadow: none !important;
+    border-radius: 5px;
+    font-size: 13px;
+    min-height: 40px !important;
+    background-color: white !important;
+    background-image: linear-gradient(#ffffff 1%, #fff 15%) !important;
+}
+
+.chosen-search-input {
+    font-size: 12px;
+    color: rgb(95, 95, 95) !important;
+}
+
+.search-choice {
+    background-image: linear-gradient(#ffffff 20%, #ffffff 50%, #ffffff 52%, #ffffff 100%) !important;
+    /* background-image: linear-gradient(#F1F9FF 20%, #f5faff 50%, #d5edff 52%, #dff1ff 100%) !important; */
+    border-color: rgb(0, 0, 0) !important;
+}
+
+.search-choice-close {
+    color: black !important;
+}
+
+
+/*================================================================
+  STOCK UPDATE CSS HERE
+  ================================================================*/
+
+.update-stock-product-img {
+    max-height: 200px;
+    max-width: 200px;
+}
+
+
+/*================================================================
+  SEND SMS CSS HERE
+  ================================================================*/
+
+.send-msg-shop-img {
+    max-height: 220px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+
+/*================================================================
+  TOGGLE BUTTON CSS HERE
+  ================================================================*/
+
+.check-box2 {
+    height: fit-content;
+    display: grid;
+    place-items: center;
+    margin: 0;
+}
+
+.check-box2 {
+    transform: scale(2);
+}
+
+.check-box2>input[type="checkbox"] {
+    position: relative;
+    appearance: none;
+    width: 16px;
+    height: 8px;
+    background: #3F3D56;
+    border-radius: 50px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.check-box2>input:checked[type="checkbox"] {
+    background: var(--theme-color-blue);
+}
+
+.check-box2>input[type="checkbox"]::after {
+    position: absolute;
+    content: "";
+    width: 6px;
+    height: 6px;
+    top: 1px;
+    left: 1px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+    transition: 0.4s;
+}
+
+.check-box2>input:checked[type="checkbox"]::after {
+    left: 55%;
+}
