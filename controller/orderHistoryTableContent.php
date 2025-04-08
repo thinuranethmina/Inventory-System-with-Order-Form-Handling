@@ -87,7 +87,7 @@ if (User::is_allow()) {
     }
 
     if ($_SESSION['user']['user_type'] == '4') {
-        $sql .= " AND `invoice`.`user_id` = '" . $_SESSION['user']['id'] . "' ";
+        // $sql .= " AND `invoice`.`user_id` = '" . $_SESSION['user']['id'] . "' ";
     } else {
         if (isset($_POST['user'])) {
             if ($_POST['user'] != '' && $_POST['user'] != null) {
@@ -135,7 +135,18 @@ if (User::is_allow()) {
             $sql2 .= " AND `invoice`.`is_delivered` = '" . $_POST['deliver'] . "' ";
         }
     }
-
+    
+    if (isset($_POST['from'])) {
+        $from = $_POST['from'] ?? null;
+        $sql .= " AND `invoice`.`date_time` >= '$from 00:00:00'";
+        $sql2 .= " AND `invoice`.`date_time` >= '$from 00:00:00'";
+    }
+    
+    if (isset($_POST['to'])) {
+        $to = $_POST['to'] ?? null;
+        $sql .= " AND `invoice`.`date_time` <= '$to 23:59:59'";
+        $sql2 .= " AND `invoice`.`date_time` <= '$to 23:59:59'";
+    }
 
     if ($_SESSION['user']['user_type'] == '1') {
         if (isset($_POST['isDelete'])) {
@@ -170,7 +181,6 @@ if (User::is_allow()) {
             $order_rs = Database::search($sql . " GROUP BY `invoice`.`id`  ORDER BY `invoice`.`date_time` DESC", "ssssss", ['%' . $_POST['text'] . '%', '%' . $_POST['text'] . '%', '%' . $_POST['text'] . '%', '%' . $_POST['text'] . '%', '%' . $_POST['text'] . '%', '%' . $_POST['text'] . '%']);
         }
     }
-
 
 ?>
 

@@ -43,14 +43,18 @@ if (User::is_allow()) {
                                     <!-- Wrapper for carousel items -->
                                     <div class="carousel-inner">
                                         <div class="carousel-item active">
-                                            <img style="height: 200px;" src="<?= $product['cover_image'] ?>" alt="">
+                                            <a data-fancybox="gallery" href="<?= $product['cover_image'] ?>">
+                                                <img style="height: 200px;" src="<?= $product['cover_image'] ?>" alt="">
+                                            </a>
                                         </div>
                                         <?php
 
                                         while ($image = $images_rs->fetch_assoc()) {
                                         ?>
                                             <div class="carousel-item">
-                                                <img style="height: 200px;" src="<?= $image['path'] ?>" alt="">
+                                                <a data-fancybox="gallery" href="<?= $image['path'] ?>">
+                                                    <img style="height: 200px;" src="<?= $image['path'] ?>" alt="">
+                                                </a>
                                             </div>
                                         <?php
                                         }

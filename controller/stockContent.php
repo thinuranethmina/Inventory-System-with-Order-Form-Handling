@@ -111,35 +111,35 @@ if (User::is_allow()) {
                         while ($category = $category_rs->fetch_assoc()) {
                             ?>
                             <tr>
-                                <td>
-                                    <?= $category['name'] ?>
-                                </td>
-                                <td class="text-end">
-                                    <?php $stock = ${'category_id_' . $category['id'] . '_primary_stock'} ?><span
-                                        class="text-black-50 fw-bold"><?= ($stock == 0 && $primary_stock == 0 || ($primary_stock == 0)) ? " (0%)" : " (" . round((($stock / $primary_stock) * 100), 1) . "%)" ?></span>
-                                    <?= $stock ?>
-                                </td>
-                                <td class="text-end">
-                                    <?php $stock = ${'category_id_' . $category['id'] . '_ongoing_stock'} ?>
-                                    <span class="text-black-50 fw-bold">
-                                        <?= ($stock == 0 && $ongoing_stock == 0 || ($ongoing_stock == 0)) ? " (0%)" : " (" . round((($stock / $ongoing_stock) * 100), 1) . "%)" ?></span>
-                                    <?= $stock ?>
-                                </td>
-                                <td class="text-end">
-                                    <?php $stock = ${'category_id_' . $category['id'] . '_deliver_pending_qty'} ?>
-                                    <span
-                                        class="text-black-50 fw-bold"><?= " (" . round((($stock / $deliver_pending_qty) * 100), 1) . "%)" ?></span>
-                                    <?= $stock ?>
-                                </td>
-                                <?php
-                                $total = ${'category_id_' . $category['id'] . '_primary_stock'} + ${'category_id_' . $category['id'] . '_ongoing_stock'} - ${'category_id_' . $category['id'] . '_deliver_pending_qty'};
-                                ?>
-                                <td class="text-end pe-3 <?= $total < 0 ? 'text-danger fw-bold' : '' ?>">
-                                    <span class="text-black-50 fw-bold">
-                                        <?= ($total == 0 && $summery == 0 || ($summery == 0)) ? " (0%)" : " (" . round((($total / $summery) * 100), 1) . "%)" ?></span>
-                                    <?= $total ?>
-                                </td>
-                            </tr>
+                                                <td>
+                                                    <?= $category['name'] ?>
+                                                </td>
+                                                <td class="text-end">
+                                                    <?php $stock = ${'category_id_' . $category['id'] . '_primary_stock'} ?><span
+                                                        class="text-black-50 fw-bold"><?= ($stock == 0 && $primary_stock == 0 || ($primary_stock == 0)) ? " (0%)" : " (" . round((($stock / $primary_stock) * 100), 1) . "%)" ?></span>
+                                                    <?= $stock ?>
+                                                </td>
+                                                <td class="text-end">
+                                                    <?php $stock = ${'category_id_' . $category['id'] . '_ongoing_stock'} ?>
+                                                    <span class="text-black-50 fw-bold">
+                                                        <?= ($stock == 0 && $ongoing_stock == 0 || ($ongoing_stock == 0)) ? " (0%)" : " (" . round((($stock / $ongoing_stock) * 100), 1) . "%)" ?></span>
+                                                    <?= $stock ?>
+                                                </td>
+                                                <td class="text-end">
+                                                    <?php $stock = ${'category_id_' . $category['id'] . '_deliver_pending_qty'} ?>
+                                                    <span
+                                                        class="text-black-50 fw-bold"><?= ($stock == 0 && $deliver_pending_qty == 0 || ($deliver_pending_qty == 0)) ? " (0%)" : " (" . round((($stock / $deliver_pending_qty) * 100), 1) . "%)" ?></span>
+                                                    <?= $stock ?>
+                                                </td>
+                                                <?php
+                                                $total = ${'category_id_' . $category['id'] . '_primary_stock'} + ${'category_id_' . $category['id'] . '_ongoing_stock'} - ${'category_id_' . $category['id'] . '_deliver_pending_qty'};
+                                                ?>
+                                                <td class="text-end pe-3 <?= $total < 0 ? 'text-danger fw-bold' : '' ?>">
+                                                    <span class="text-black-50 fw-bold">
+                                                        <?= ($total == 0 && $summery == 0 || ($summery == 0)) ? " (0%)" : " (" . round((($total / $summery) * 100), 1) . "%)" ?></span>
+                                                    <?= $total ?>
+                                                </td>
+                                            </tr>
                             <?php
                         }
 
@@ -166,7 +166,7 @@ if (User::is_allow()) {
                         </tr>
                     </tbody>
                 </table>
-
+                
                 <span class="text-start ms-0 mt-5 my-auto">
                     Date &amp; Time:<span class="fst-italic text-secondary">
                         <?= date('Y-m-d h:i A', time()) ?></span>

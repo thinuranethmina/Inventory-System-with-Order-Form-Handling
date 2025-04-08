@@ -280,6 +280,31 @@ if (User::is_allow()) {
                                                         </table>
                                                     </div>
 
+                                                    <div class="col-12 col-md-6 col-xl-5 mr-0 ml-auto">
+                                                        <table>
+                                                            <tbody>
+                                                                <tr style="height: 8px !important;">
+                                                                    <td colspan="2">
+                                                                        <select id="chequeTerm" class="form-control p-0 px-1 border-0" style="height: min-content !important;">
+                                                                            <option value="0">Select Cheque Term</option>
+                                                                            <?php
+                                                                            $cheque_term_rs = Database::search("SELECT * FROM `cheque_term`");
+                                    
+                                                                            while ($cheque_term = $cheque_term_rs->fetch_assoc()) {
+                                                                            ?>
+                                                                                <option value="<?= $cheque_term['id'] ?>" <?= $invoice['cheque_term_id'] == $cheque_term['id'] ? 'selected':'' ?>><?= $cheque_term['name'] ?></option>
+                                                                            <?php
+                                                                            }
+                                    
+                                                                            ?>
+                                                                        </select>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                        
+                                                        
                                                     <div class="col-12 mr-0 ml-auto mt-3">
                                                         <h3>Payments</h3>
                                                         <table>

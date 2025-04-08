@@ -66,7 +66,8 @@ if (User::is_allow()) {
                 background-image: url('assets/images/back-ground/blue-half.png');
                 background-repeat: no-repeat;
                 background-position: top;
-                /* background-size: cover; */
+                background-size: contain; 
+                min-width:fit-content;
             }
         </style>
 
@@ -115,14 +116,14 @@ if (User::is_allow()) {
 
                     <div class="col-12">
                         <div class="row">
-
+                            
                             <div class="col-12 col-md-3 mb-2">
                                 <?php
 
                                 if ($_SESSION['user']['user_type'] == '4') {
                                 ?>
                                     <select id="user" class="form-control" disabled>
-                                        <option value="<?= $_SESSION['user']['id'] ?>">Your Orders</option>
+                                        <option value="<?= $_SESSION['user']['id'] ?>">All Orders</option>
                                     </select>
                                 <?php
                                 } else {
@@ -149,6 +150,7 @@ if (User::is_allow()) {
 
 
                             </div>
+                            
 
                             <div class="col-12 col-md-3 mb-2">
                                 <select id="shop" class="form-control" onchange="changeResult('orderHistory');">
@@ -279,60 +281,71 @@ if (User::is_allow()) {
 
                             <?php
 
-                            if ($_SESSION['user']['user_type'] != 1) {
-                            ?>
-                                <div class="col-12 col-md-2 mb-2">
-                                    <select id="status" class="form-control" disabled>
-                                        <option value="all">All Orders</option>
-                                    </select>
-                                </div>
-                            <?php
-                            } else {
+                            if ($_SESSION['user']['user_type'] == 1) {
                             ?>
                                 <div class="col-12 col-md-2 mb-2">
                                     <select id="status" class="form-control" onchange="changeResult('orderHistory');">
                                         <option value="all">All Orders</option>
                                         <option value="1">Deleted Only</option>
-                                        <option value="0" <?php if (isset($_GET['status'])) {
-                                                                if ($_GET['status'] == 0) {
-                                                                    echo " selected ";
-                                                                }
-                                                            } ?>>Not Deleted</option>
+                                        <option value="0" selected>Not Deleted</option>
                                     </select>
                                 </div>
                             <?php
+                            }else{
+                                ?>
+                                <input type="hidden" value="0" id="status">
+                                <?php
                             }
                             ?>
-
 
                             <div class="col-12 col-md-3 mb-2">
                                 <input type="text" class="form-control" id="search" onkeyup="changeResult('orderHistory');" placeholder="Search">
                             </div>
+                            
+                            <div class="col-12 col-lg-6 mb-2 d-flex flex-column flex-md-row align-items-center gap-3">
+                                    <div class="d-flex align-items-center gap-3 w-100">
+                                        <span class="text-white">From</span>
+                                        <input id="from" class="form-control" type="date" onchange="changeResult('orderHistory');" value="<?= date('Y-m-d'); ?>" />
+                                    </div>
+                                    <div class="d-flex align-items-center gap-3 w-100">
+                                        <span class="text-white">To</span>
+                                        <input id="to" class="form-control" type="date" onchange="changeResult('orderHistory');" value="<?= date('Y-m-d'); ?>" />
+                                    </div>
+                            </div>
 
+                            <div class="col-12 col-md-6 mb-2">
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-light w-100" onclick="changeResult('orderHistory');">Run Report</button>
+                                    <button class="btn btn-light w-100" onclick="downloadOrdersPdf(this);">Download PDF</button>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
 
                     <?php
+                    $today = date('Y-m-d');
+                    
+                    $sql = "SELECT *,`shop`.`name` AS `shop`,`invoice`.`id` AS `id`,`invoice`.`date_time` AS `date_time` FROM `invoice` INNER JOIN `shop` ON `shop`.`id` = `invoice`.`shop_id` WHERE `invoice`.`id` >= '0'";
 
-                    $sql = "SELECT *,`shop`.`name` AS `shop`,`invoice`.`id` AS `id`,`invoice`.`date_time` AS `date_time` FROM `invoice` INNER JOIN `shop` ON `shop`.`id` = `invoice`.`shop_id` WHERE `invoice`.`id` >= '0' ";
 
-
-                    if ($_SESSION['user']['user_type'] == '4') {
-                        $sql .= " AND `invoice`.`user_id` = '" . $_SESSION['user']['id'] . "' ";
-                    }
+                    // if ($_SESSION['user']['user_type'] == '4') {
+                    //     $sql .= " AND `invoice`.`user_id` = '" . $_SESSION['user']['id'] . "' ";
+                    // }
 
                     if ($_SESSION['user']['user_type'] != '1') {
                         $sql .= " AND `invoice`.`is_delete` = '0' ";
                     }
 
-                    $order_rs = Database::search($sql . " ORDER BY `invoice`.`date_time` DESC ");
+                    $all_order_rs = Database::search($sql . " ORDER BY `invoice`.`date_time` DESC ");
+                    $order_rs = Database::search($sql . " AND `invoice`.`is_delete` = '0' AND `invoice`.`date_time` >= '$today 00:00:00' AND `invoice`.`date_time` <= '$today 23:59:59' ORDER BY `invoice`.`date_time` DESC ");
 
                     ?>
 
                     <div class="col-12 px-2" id="resultContent">
                         <div class="row">
                             <div class="col-12 d-none d-md-block">
-                                <span class="text-white f-w-300">Showing <?= $order_rs->num_rows ?> of <?= $order_rs->num_rows ?> entries</span>
+                                <span class="text-white f-w-300">Showing <?= $order_rs->num_rows ?> of <?= $all_order_rs->num_rows ?> entries</span>
                             </div>
                         </div>
 

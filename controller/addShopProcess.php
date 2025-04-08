@@ -98,7 +98,7 @@ if (User::is_allow()) {
                     $isReady = true;
                 }
 
-                if ($isReady) {
+                // if ($isReady) {
 
                     $allowed_image_extentions = array("image/jpg", "image/jpeg", "image/png", "image/webp");
 
@@ -140,9 +140,9 @@ if (User::is_allow()) {
                     } else {
                         echo "Invalid file type for image (Valid only PNG, JPG, JPEG, WEBP)";
                     }
-                } else {
-                    echo "Already exist this mobile number";
-                }
+                // } else {
+                //     echo "Already exist this mobile number";
+                // }
             } else {
                 echo "Already exist this shop name";
             }

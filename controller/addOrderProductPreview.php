@@ -16,7 +16,9 @@ if (User::is_allow()) {
 ?>
                 <div class="col-12">
                     <div>
-                        <img class="rounded rounded-5 border border-3 update-stock-product-img" src="<?= $product['cover_image'] ?>" alt="Profile Image">
+                        <a data-fancybox="gallery" href="<?= $product['cover_image'] ?>">
+                            <img class="rounded rounded-5 border border-3 update-stock-product-img" src="<?= $product['cover_image'] ?>">
+                        </a>
                     </div>
                     <div class="my-auto px-xl-5 flex-fill">
                         <h4><?= $product['title'] ?></h4>

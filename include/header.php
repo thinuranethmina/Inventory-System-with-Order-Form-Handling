@@ -88,12 +88,20 @@
                 } else {
                 ?>
                     <li class="pc-item">
-                        <a href="order-history.php" class="pc-link"><span class="pc-micon"><i class="material-icons-two-tone">manage_history</i></span><span class="pc-mtext">Order History</span></a>
+                        <a href="order-history.php" class="pc-link"><span class="pc-micon"><i class="material-icons-two-tone">refresh</i></span><span class="pc-mtext">Order History</span></a>
                     </li>
                 <?php
                 }
                 ?>
 
+                    <li class="pc-item pc-hasmenu">
+                        <a class="pc-link "><span class="pc-micon"><i class="material-icons-two-tone">analytics</i></span><span class="pc-mtext">Orders Summery</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span></a>
+                        <ul class="pc-submenu">
+                            <li class="pc-item"><a class="pc-link" href="order-summery.php">Item wise</a></li>
+                            <li class="pc-item"><a class="pc-link" href="order-shop-summery.php">Shop wise</a></li>
+                        </ul>
+                    </li>
+                    
                 <?php
                 if ($_SESSION['user']['user_type'] <= 2) {
                 ?>

@@ -8,8 +8,8 @@ class Database
     public static function setUpConnection()
     {
         if (!isset(Database::$connection)) {
-            Database::$connection = new mysqli("localhost", "root", "THINURA123", "nsonic_inventory");
-            // Database::$connection = new mysqli("localhost", "nsonicperformanc_nsonicOrders", "VTK~wC?v_n,s", "nsonicperformanc_orders");
+            // Database::$connection = new mysqli("localhost", "root", "THINURA123", "nsonic_inventory");
+            Database::$connection = new mysqli("localhost", "nsonicperformanc_nsonicOrders", "VTK~wC?v_n,s", "nsonicperformanc_orders");
 
             Database::$connection->set_charset("utf8");
         }

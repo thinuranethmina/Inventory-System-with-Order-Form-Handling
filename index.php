@@ -224,7 +224,7 @@ if (User::is_allow()) {
                                                 <td class="text-end">
                                                     <?php $stock = ${'category_id_' . $category['id'] . '_deliver_pending_qty'} ?>
                                                     <span
-                                                        class="text-black-50 fw-bold"><?= " (" . round((($stock / $deliver_pending_qty) * 100), 1) . "%)" ?></span>
+                                                        class="text-black-50 fw-bold"><?=  ($stock == 0 && $deliver_pending_qty == 0 || ($deliver_pending_qty == 0)) ? " (0%)" :" (" . round((($stock / $deliver_pending_qty) * 100), 1) . "%)" ?></span>
                                                     <?= $stock ?>
                                                 </td>
                                                 <?php
@@ -271,7 +271,7 @@ if (User::is_allow()) {
                             </div>
                         </div>
                     </div>
-
+                    
                     <!-- Overall stock status end -->
 
 

@@ -32,7 +32,7 @@ if (User::allowOnly([User::SUPER_ADMIN, User::ADMIN])) {
 
         return 'just now';
     }
-    ?>
+?>
 
     <!DOCTYPE html>
     <html lang="en">
@@ -100,8 +100,7 @@ if (User::allowOnly([User::SUPER_ADMIN, User::ADMIN])) {
                                 </div>
                             </div>
                             <div class="modal--footer d-sm-flex text-secondary">
-                                <span class="text-start ms-0 my-auto"> Date & Time:<span
-                                        class="fst-italic text-secondary">2023-10-06 06:13:54</span>
+                                <span class="text-start ms-0 my-auto"> Date & Time:<span class="fst-italic text-secondary">2023-10-06 06:13:54</span>
                                 </span>
                                 <div class="ml-auto float-right p-2">
                                     <button class="btn btn-primary">close</button>
@@ -149,11 +148,11 @@ if (User::allowOnly([User::SUPER_ADMIN, User::ADMIN])) {
                                     $shop_rs = Database::search("SELECT * FROM `shop` WHERE `shop`.`id` != '0' AND `shop`.`mobile` != '' ");
 
                                     while ($shop = $shop_rs->fetch_assoc()) {
-                                        ?>
+                                    ?>
                                         <option value="<?= $shop['id'] ?>">
                                             <?= $shop['name'] ?>
                                         </option>
-                                        <?php
+                                    <?php
                                     }
                                     ?>
                                 </select>
@@ -167,19 +166,18 @@ if (User::allowOnly([User::SUPER_ADMIN, User::ADMIN])) {
                                     $send_id_rs = Database::search("SELECT * FROM `message_send_id`");
 
                                     while ($send_id = $send_id_rs->fetch_assoc()) {
-                                        ?>
+                                    ?>
                                         <option value="<?= $send_id['id'] ?>">
                                             <?= $send_id['name'] ?>
                                         </option>
-                                        <?php
+                                    <?php
                                     }
                                     ?>
                                 </select>
                             </div>
 
                             <div class="col-12 col-md-4 col-xl-3 mb-2 mb-md-0">
-                                <input type="text" class="form-control" onkeyup="changeResult('smsHistory');" id="search"
-                                    placeholder="Search">
+                                <input type="text" class="form-control" onkeyup="changeResult('smsHistory');" id="search" placeholder="Search">
                             </div>
 
                         </div>
@@ -192,8 +190,7 @@ if (User::allowOnly([User::SUPER_ADMIN, User::ADMIN])) {
                     <div class="col-12 px-2" id="resultContent">
                         <div class="row">
                             <div class="col-12 d-none d-md-block">
-                                <span class="text-white f-w-300">Showing <?= $msg_rs->num_rows ?> of
-                                    <?= $msg_rs->num_rows ?> entries</span>
+                                <span class="text-white f-w-300">Showing <?= $msg_rs->num_rows ?> of <?= $msg_rs->num_rows ?> entries</span>
                             </div>
                         </div>
 
@@ -215,7 +212,7 @@ if (User::allowOnly([User::SUPER_ADMIN, User::ADMIN])) {
                                 while ($msg = $msg_rs->fetch_assoc()) {
 
                                     if ($date == date('Y-m-d', strtotime($msg['date_time']))) {
-                                        ?>
+                                ?>
 
                                         <tr>
                                             <td>
@@ -235,22 +232,19 @@ if (User::allowOnly([User::SUPER_ADMIN, User::ADMIN])) {
                                             <td>
                                                 <?= $msg['send_id'] . ": " . $msg['message'] ?>
                                             </td>
-                                            <td class="d-none d-lg-table-cell text-center"><?= getRelativeTime($msg['date_time']) ?>
-                                            </td>
+                                            <td class="d-none d-lg-table-cell text-center"><?= getRelativeTime($msg['date_time']) ?></td>
                                             <td class="text-center">
-                                                <img class="me-2 action-icon" onclick="viewModal('<?= $msg['id'] ?>','SMS');"
-                                                    src="assets/images/icons/view.png">
+                                                <img class="me-2 action-icon" onclick="viewModal('<?= $msg['id'] ?>','SMS');" src="assets/images/icons/view.png">
                                             </td>
                                         </tr>
 
-                                        <?php
+                                    <?php
 
                                     } else {
                                         $date = date('Y-m-d', strtotime($msg['date_time']));
-                                        ?>
+                                    ?>
                                         <tr class="shadow-none" style="height: 8px !important;">
-                                            <td colspan="8" class="text-center date-row">
-                                                <?= date("Y-m-d") == $date ? "Today" : $date ?>
+                                            <td colspan="8" class="text-center date-row"><?= date("Y-m-d") == $date ? "Today" : $date ?>
                                             </td>
                                         </tr>
 
@@ -273,14 +267,12 @@ if (User::allowOnly([User::SUPER_ADMIN, User::ADMIN])) {
                                             <td>
                                                 <span class="text-truncate-1"><?= $msg['send_id'] . ": " . $msg['message'] ?></span>
                                             </td>
-                                            <td class="d-none d-lg-table-cell text-center" style="min-width: 120px;">
-                                                <?= getRelativeTime($msg['date_time']) ?></td>
+                                            <td class="d-none d-lg-table-cell text-center" style="min-width: 120px;"><?= getRelativeTime($msg['date_time']) ?></td>
                                             <td class="text-center">
-                                                <img class="me-2 action-icon" onclick="viewModal('<?= $msg['id'] ?>','SMS');"
-                                                    src="assets/images/icons/view.png">
+                                                <img class="me-2 action-icon" onclick="viewModal('<?= $msg['id'] ?>','SMS');" src="assets/images/icons/view.png">
                                             </td>
                                         </tr>
-                                        <?php
+                                <?php
                                     }
                                     $x++;
                                 }
@@ -299,11 +291,11 @@ if (User::allowOnly([User::SUPER_ADMIN, User::ADMIN])) {
 
 
 
-        <?php require_once ('include/footer.php'); ?>
+        <?php require_once('include/footer.php'); ?>
 
     </body>
 
     </html>
-    <?php
+<?php
 }
 ?>

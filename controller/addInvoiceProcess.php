@@ -24,6 +24,10 @@ if (User::is_allow()) {
         echo "Please select payment type";
     } else if (empty(trim($_POST['paymentType'])) || $_POST['paymentType'] == '0') {
         echo "Please select payment type";
+    } else if ($_POST['paymentType'] == '3' && !isset($_POST['chequeTerm'])) {
+        echo "Please select cheque term";
+    } else if ($_POST['paymentType'] == '3' && ($_POST['chequeTerm']=='0' || empty(trim($_POST['chequeTerm'])))) {
+        echo "Please select cheque term";
     } else {
 
         $isReady = false;
@@ -181,8 +185,14 @@ if (User::is_allow()) {
                     Database::iud("UPDATE `next_value` SET `value`='" . $nxt_order_id . "' ");
 
                     $date_time = date("Y-m-d H:i:s");
+                    
+                    $chequeTerm = null;
+                    
+                    if($_POST['paymentType'] == '3' && $_POST['chequeTerm'] != '0'){
+                        $chequeTerm = $_POST['chequeTerm'];
+                    }
 
-                    Database::iud("INSERT INTO `invoice`(`ref`,`order_id`,`discount`,`sub_total`,`total`,`date_time`,`shop_id`,`note`,`is_delivered`,`is_completed`,`is_credit`,`user_id`,`return_total`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ", "sssssssssssss", [$ref, $order_id, $discount, $subTotal, $total, $date_time, $_POST['shop'], $note, '0', $balance <= 0 ? "1" : "0", $_POST['priceType'] == 2 ? "1" : "0", $_SESSION['user']['id'], $returnTotal]);
+                    Database::iud("INSERT INTO `invoice`(`ref`,`order_id`,`discount`,`sub_total`,`total`,`date_time`,`shop_id`,`note`,`is_delivered`,`is_completed`,`is_credit`,`user_id`,`cheque_term_id`,`return_total`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) ", "ssssssssssssss", [$ref, $order_id, $discount, $subTotal, $total, $date_time, $_POST['shop'], $note, '0', $balance <= 0 ? "1" : "0", $_POST['priceType'] == 2 ? "1" : "0", $_SESSION['user']['id'], $chequeTerm, $returnTotal]);
 
                     $invoice_id = Database::search("SELECT `id` FROM `invoice` WHERE `ref` = '" . $ref . "' ")->fetch_assoc()['id'];
 

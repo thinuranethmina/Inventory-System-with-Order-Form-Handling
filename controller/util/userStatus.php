@@ -13,7 +13,6 @@ class User
     {
         $cookie_lifetime = 60 * 60 * 24; // 24 hours in seconds
         session_set_cookie_params($cookie_lifetime);
-        ini_set('session.gc_maxlifetime', $cookie_lifetime);
         session_start();
 
         date_default_timezone_set('Asia/Kolkata');

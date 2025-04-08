@@ -131,7 +131,7 @@ if (User::is_allow()) {
 
                             <tr style="height: 8px !important;">
                                 <td colspan="2">
-                                    <select id="paymentType" class="form-control p-0 px-1 border-0" style="height: min-content !important;">
+                                    <select id="paymentType" class="form-control p-0 px-1 border-0" onChange="selectPaymentType(this);" style="height: min-content !important;">
                                         <option value="0">Select Payment Type</option>
                                         <?php
                                         $shop_rs = Database::search("SELECT * FROM `payment_type` ORDER BY `name` ASC");
@@ -139,6 +139,23 @@ if (User::is_allow()) {
                                         while ($shop = $shop_rs->fetch_assoc()) {
                                         ?>
                                             <option value="<?= $shop['id'] ?>"><?= $shop['name'] ?></option>
+                                        <?php
+                                        }
+
+                                        ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr id="chequeTermRow" class="d-none" style="height: 8px !important;">
+                                <td colspan="2">
+                                    <select id="chequeTerm" class="form-control p-0 px-1 border-0" style="height: min-content !important;">
+                                        <option value="0">Select Cheque Term</option>
+                                        <?php
+                                        $cheque_term_rs = Database::search("SELECT * FROM `cheque_term`");
+
+                                        while ($cheque_term = $cheque_term_rs->fetch_assoc()) {
+                                        ?>
+                                            <option value="<?= $cheque_term['id'] ?>"><?= $cheque_term['name'] ?></option>
                                         <?php
                                         }
 

@@ -23,11 +23,11 @@ window.addEventListener('offline', () => {
 });
 
 function startLoading() {
-
-
+    
+    
     var r = new XMLHttpRequest();
 
-    r.onreadystatechange = function () {
+    r.onreadystatechange = function() {
         if (r.readyState == 4) {
             var t = r.responseText;
             if (t == "Success") {
@@ -40,7 +40,7 @@ function startLoading() {
     };
     r.open("GET", "loading.php", true);
     r.send();
-
+    
 
     // fetch("loading.php", {
     //         method: "POST",
@@ -55,16 +55,19 @@ function startLoading() {
     //     })
 }
 
-
 function endLoading() {
-    document.getElementById('loadingDiv').remove();
+    
+    if(document.getElementById('loadingDiv')){
+        document.getElementById('loadingDiv').remove();
+    }
+    
 }
 
 function refreshStock() {
 
     fetch(".//../controller/stockContent.php", {
-        method: "POST",
-    }).then(response => response.text())
+            method: "POST",
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -89,7 +92,7 @@ function closeModal1() {
     document.getElementById("modal-1").classList.remove("show-modal");
     document.getElementById("modal-1").classList.add("hide-modal");
 
-    setTimeout(function () {
+    setTimeout(function() {
         document.getElementById("modal-1").style.display = "none";
         document.getElementById("content-modal-1").classList.remove("hide-modal");
         document.getElementById("content-modal-1").classList.add("show-modal");
@@ -113,9 +116,9 @@ function changePassword() {
 
     startLoading();
     fetch(".//../controller/changePasswordProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             endLoading();
             if (text == "success") {
@@ -153,16 +156,16 @@ function addImage(id) {
     let imgWindow = document.getElementById("image" + id); //image tag
 
 
-    newImg.onchange = function () {
+    newImg.onchange = function() {
         let file0 = this.files[0];
 
         let form = new FormData();
         form.append("image", newImg.files[0]);
 
         fetch(".//../controller/image_validate_process.php", {
-            method: "POST",
-            body: form,
-        }).then(response => response.text())
+                method: "POST",
+                body: form,
+            }).then(response => response.text())
             .then(text => {
                 if (text == 'success') {
                     if (document.getElementById('removeStauts' + id) != null) {
@@ -249,9 +252,9 @@ function addProduct() {
     startLoading();
 
     fetch(".//../controller/addProductProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             endLoading();
             if (text == 'success') {
@@ -309,9 +312,9 @@ function addShop(element) {
 
 
     fetch(".//../controller/addShopProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             endLoading();
             element.disable = false;
@@ -351,9 +354,9 @@ function viewModal(id, page) {
     form.append("id", id);
 
     fetch(".//../controller/" + page + "ModalContent.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -416,7 +419,8 @@ function changeResult(page) {
         let product = document.getElementById("product").value;
         let deliver = document.getElementById("deliver").value;
         let payment = document.getElementById("payment").value;
-
+        let from = document.getElementById("from").value;
+        let to = document.getElementById("to").value;
 
         form.append("product", product);
         form.append("deliver", deliver);
@@ -427,6 +431,33 @@ function changeResult(page) {
         form.append("city", city);
         form.append("district", district);
         form.append("shop", shop);
+        form.append("from", from);
+        form.append("to", to);
+
+    } else if (page == 'orderSummery') {
+        let user = document.getElementById("user").value;
+        let from = document.getElementById("from").value;
+        let to = document.getElementById("to").value;
+        let shops = document.querySelector('.select-chosen');
+
+        form.append("user", user);
+        form.append("from", from);
+        form.append("to", to);
+        
+        for (let option of shops.selectedOptions) {
+            form.append('shops[]', option.value);
+        }
+
+
+    } else if (page == 'orderShopSummery') {
+        let user = document.getElementById("user").value;
+        let from = document.getElementById("from").value;
+        let to = document.getElementById("to").value;
+
+        form.append("user", user);
+        form.append("from", from);
+        form.append("to", to);
+
 
     } else if (page == 'product') {
 
@@ -452,9 +483,9 @@ function changeResult(page) {
 
 
     fetch(".//../controller/" + page + "TableContent.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -464,6 +495,69 @@ function changeResult(page) {
         }).catch(error => {
             console.error('Fetch error:', error);
         })
+
+}
+
+
+function downloadOrdersPdf(element) {
+    
+    element.disabled = true;
+    element.innerText = "Generating...";
+    
+    let search = document.getElementById("search").value;
+    let city = document.getElementById("city").value;
+    let district = document.getElementById("district").value;
+    let user = document.getElementById("user").value;
+    let shop = document.getElementById("shop").value;
+    let isDelete = document.getElementById("status").value;
+    let product = document.getElementById("product").value;
+    let deliver = document.getElementById("deliver").value;
+    let payment = document.getElementById("payment").value;
+    let from = document.getElementById("from").value;
+    let to = document.getElementById("to").value;
+
+    let form = new FormData();
+
+    form.append("product", product);
+    form.append("deliver", deliver);
+    form.append("payment", payment);
+    form.append("isDelete", isDelete);
+    form.append("user", user);
+    form.append("text", search);
+    form.append("city", city);
+    form.append("district", district);
+    form.append("shop", shop);
+    form.append("from", from);
+    form.append("to", to);
+    
+    
+    fetch(`generate-pdf.php`, {
+        method: 'POST',
+        body: form,
+    })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `orders.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            element.disabled = false;
+            element.innerText = "Download PDF";
+        })
+        // .then(response => response.text())
+        // .then(text => {
+        //     alert(text);
+        // })
+        .catch(error => {
+            console.error('Error:', error);
+
+            element.disabled = false;
+            element.innerText = "Download PDF";
+        });
 
 }
 
@@ -478,9 +572,9 @@ function updateStockProductViewer() {
     form.append("stockType", stockType);
 
     fetch(".//../controller/productPreviewForUpdateStock.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -500,9 +594,9 @@ function loadUpdateStockContent() {
     form.append("stock", stockType);
 
     fetch(".//../controller/updateStockContent.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -535,9 +629,9 @@ function operationInfoViewer() {
     form.append("stockType", stockType);
 
     fetch(".//../controller/operationPreviewForUpdateStock.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -561,6 +655,7 @@ function updateStock() {
         confirmButtonText: 'Yes, Update Now!'
     }).then((result) => {
         if (result.isConfirmed) {
+            startLoading();
 
             let product = document.getElementById("product").value;
             let operation = document.getElementById("operation").value;
@@ -575,12 +670,11 @@ function updateStock() {
             form.append("cqty", cqty);
             form.append("note", note);
             form.append("stockType", stockType);
-            startLoading();
 
             fetch(".//../controller/stockUpdateProcess.php", {
-                method: "POST",
-                body: form,
-            }).then(response => response.text())
+                    method: "POST",
+                    body: form,
+                }).then(response => response.text())
                 .then(text => {
                     endLoading();
 
@@ -605,6 +699,7 @@ function updateStock() {
                             'success'
                         )
                     } else {
+                        
 
                         Swal.fire(
                             'Error',
@@ -613,6 +708,7 @@ function updateStock() {
                         )
                     }
                 }).catch(error => {
+                        alert(error);
                     console.error('Fetch error:', error);
                 })
 
@@ -641,9 +737,9 @@ function updateSendSMSShopViewer() {
     form.append("shop", shop);
 
     fetch(".//../controller/shopPreviewForSendSMS.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -669,9 +765,9 @@ function sendSMS() {
     startLoading();
 
     fetch(".//../controller/SMSSendProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             endLoading();
 
@@ -728,9 +824,9 @@ function sendMobileSMS() {
     startLoading();
 
     fetch(".//../controller/directSMSSendProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             endLoading();
 
@@ -792,9 +888,9 @@ function viewAddProductModalInAddOrder() {
     }
 
     fetch(".//../controller/addOrderAddProductModalTemp.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -825,9 +921,9 @@ function viewAddProductModalInUpdateAddOrder() {
     }
 
     fetch(".//../controller/addOrderUpdateAddProductModalTemp.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -858,9 +954,9 @@ function viewAddProductModalInAddReturnOrder() {
     }
 
     fetch(".//../controller/addOrderAddReturnProductModalTemp.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -886,9 +982,9 @@ function updateAddOrderProductViewer() {
 
 
     fetch(".//../controller/addOrderProductPreview.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -929,9 +1025,9 @@ function addProducttoInvoice() {
 
 
         fetch(".//../controller/invoiceTableRow.php", {
-            method: "POST",
-            body: form,
-        }).then(response => response.text())
+                method: "POST",
+                body: form,
+            }).then(response => response.text())
             .then(text => {
                 isPressed = false;
 
@@ -998,9 +1094,9 @@ function addProductUpdatetoInvoice() {
 
 
         fetch(".//../controller/invoiceTableRow.php", {
-            method: "POST",
-            body: form,
-        }).then(response => response.text())
+                method: "POST",
+                body: form,
+            }).then(response => response.text())
             .then(text => {
                 isPressed = false;
 
@@ -1064,9 +1160,9 @@ function addReturnProducttoReturnTable() {
         form.append("nextRow", id);
 
         fetch(".//../controller/invoiceReturnTableRow.php", {
-            method: "POST",
-            body: form,
-        }).then(response => response.text())
+                method: "POST",
+                body: form,
+            }).then(response => response.text())
             .then(text => {
                 isPressed = false;
 
@@ -1169,9 +1265,9 @@ function updateOrderSummery() {
     }
 
     fetch(".//../controller/addOrderOrderSummeryTemp.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -1218,9 +1314,9 @@ function updateOrderSummeryInEdit() {
     }
 
     fetch(".//../controller/addOrderOrderSummeryTempInEdit.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -1273,9 +1369,9 @@ function updateOrderSummeryPayments() {
     }
 
     fetch(".//../controller/addOrderOrderSummeryPaymentCalculator.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -1341,9 +1437,9 @@ function updateOrderSummeryPaymentsInEdit() {
     }
 
     fetch(".//../controller/addOrderOrderSummeryPaymentCalculatorInEdit.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -1395,9 +1491,9 @@ function removeProduct(rid) {
     }
 
     fetch(".//../controller/addOrderRemoveProduct.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -1437,9 +1533,9 @@ function removeReturnProduct(rid) {
     }
 
     fetch(".//../controller/addOrderRemoveReturnProduct.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -1474,9 +1570,9 @@ function editProductModalOpen(eid, erow) {
 
 
     fetch(".//../controller/addOrderEditProductModalTemp.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -1505,9 +1601,9 @@ function editReturnProductModalOpen(eid, erow) {
 
 
     fetch(".//../controller/addOrderEditReturnProductModalTemp.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -1539,9 +1635,9 @@ function updateProductInInvoice(erow, eid) {
     form.append("sprice", sprice);
 
     fetch(".//../controller/invoiceTableRow.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -1597,9 +1693,9 @@ function updateReturnProductInInvoice(erow, eid) {
     form.append("price", price);
 
     fetch(".//../controller/invoiceReturnTableRow.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -1644,6 +1740,17 @@ function updateReturnProductInInvoice(erow, eid) {
 
 }
 
+function selectPaymentType(element){
+    
+    let chequeTermRow = document.getElementById("chequeTermRow");
+        
+    if(element.value == '3'){
+        chequeTermRow.classList.remove('d-none');
+    }else{
+        chequeTermRow.classList.add('d-none');
+    }
+}
+
 function AddOrderForm() {
 
     if (!isPressed) {
@@ -1652,6 +1759,7 @@ function AddOrderForm() {
         let shop = document.getElementById("shop").value;
         let note = document.getElementById("note").value;
         let priceType = document.getElementById('priceType').value;
+        let chequeTerm = document.getElementById('chequeTerm').value;
 
         var table = document.getElementById('invoiceTable');
         var rows = table.tBodies[0].rows.length;
@@ -1664,6 +1772,7 @@ function AddOrderForm() {
         form.append("rows", rows);
         form.append("note", note);
         form.append("priceType", priceType);
+        form.append("chequeTerm", chequeTerm);
         form.append("return_table_rows", return_table_rows);
 
 
@@ -1704,9 +1813,9 @@ function AddOrderForm() {
         }
 
         fetch(".//../controller/addInvoiceProcess.php", {
-            method: "POST",
-            body: form,
-        }).then(response => response.text())
+                method: "POST",
+                body: form,
+            }).then(response => response.text())
             .then(text => {
                 if (text == 'reload') {
                     window.location.reload();
@@ -1766,9 +1875,9 @@ function viewAddProductModalInAddRetailOrder() {
     }
 
     fetch(".//../controller/addRetailOrderAddProductModalTemp.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -1792,9 +1901,9 @@ function updateAddRetailOrderProductViewer() {
 
 
     fetch(".//../controller/addRetailOrderProductPreview.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -1830,9 +1939,9 @@ function addProducttoRetailInvoice() {
     form.append("nextRow", id);
 
     fetch(".//../controller/retailInvoiceTableRow.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -1907,9 +2016,9 @@ function updateRetailOrderSummery() {
     }
 
     fetch(".//../controller/addOrderRetailOrderSummeryTemp.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -1946,9 +2055,9 @@ function updateRetailOrderSummeryPayments() {
     }
 
     fetch(".//../controller/addOrderRetailOrderSummeryPaymentCalculator.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -1989,9 +2098,9 @@ function editRetailProductModalOpen(eid, erow) {
     form.append("eoqty", table.tBodies[0].rows[erow - 1].cells['0'].getAttribute('data-ongoingStock'));
 
     fetch(".//../controller/addOrderEditRetailProductModalTemp.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -2025,9 +2134,9 @@ function updateRetailProductInInvoice(erow, eid) {
     form.append("nextRow", erow + 1);
 
     fetch(".//../controller/retailInvoiceTableRow.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -2105,9 +2214,9 @@ function removeRetailProduct(rid) {
     }
 
     fetch(".//../controller/addOrderRemoveRetailProduct.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -2159,9 +2268,9 @@ function AddRetailOrderForm() {
 
     startLoading();
     fetch(".//../controller/addRetailInvoiceProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -2214,9 +2323,9 @@ function updateProductPrice(id) {
     startLoading();
 
     fetch(".//../controller/updateProductPriceProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             endLoading();
@@ -2287,9 +2396,9 @@ function updateProduct(id) {
     startLoading();
 
     fetch(".//../controller/updateProductProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             endLoading();
             if (text == 'success') {
@@ -2325,9 +2434,9 @@ function changeStatus(page, id) {
     form.append("id", id);
 
     fetch(".//../controller/change" + page + "StatusProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'active') {
@@ -2350,9 +2459,9 @@ function loadDistricts() {
     form.append("id", province);
 
     fetch(".//../controller/loadDistrictsProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -2374,9 +2483,9 @@ function loadCities() {
     form.append("id", district);
 
     fetch(".//../controller/loadCitiesProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -2398,9 +2507,9 @@ function loadSubCategories(element) {
     form.append("id", category);
 
     fetch(".//../controller/loadSubCategoryProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -2444,11 +2553,11 @@ function updateShop(id) {
     form.append("image", image);
 
     startLoading();
-
+    
     fetch(".//../controller/updateShopProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             endLoading();
             if (text == 'success') {
@@ -2487,9 +2596,9 @@ function markAsDeliveredModalOpen(id) {
     form.append("id", id);
 
     fetch(".//../controller/markAsDeliveredModalContent.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -2521,9 +2630,9 @@ function markAsDelivered(id) {
     }
 
     fetch(".//../controller/markAsDeliveredProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -2567,9 +2676,9 @@ function addPaymentModal(id) {
     form.append("id", id);
 
     fetch(".//../controller/addWholesaleOrderPaymentModalTemp.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -2594,9 +2703,9 @@ function balanceUpdate(id) {
 
 
     fetch(".//../controller/OrderBalanceCalculator.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -2632,9 +2741,9 @@ function addOrderPayment(id) {
 
 
             fetch(".//../controller/OrderPaymentProcess.php", {
-                method: "POST",
-                body: form,
-            }).then(response => response.text())
+                    method: "POST",
+                    body: form,
+                }).then(response => response.text())
                 .then(text => {
                     if (text == 'reload') {
                         window.location.reload();
@@ -2678,9 +2787,9 @@ function addAdditionalAmountModal(id) {
     form.append("id", id);
 
     fetch(".//../controller/addWholesaleOrderAdditionalAmountModalTemp.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -2706,9 +2815,9 @@ function balanceUpdateInAdditionalAmount(id) {
 
 
     fetch(".//../controller/OrderBalanceCalculatorForAdditionalAmount.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             if (text == 'reload') {
                 window.location.reload();
@@ -2743,9 +2852,9 @@ function addOrderAdditionalAmount(id) {
 
 
             fetch(".//../controller/OrderAdditionalAmountProcess.php", {
-                method: "POST",
-                body: form,
-            }).then(response => response.text())
+                    method: "POST",
+                    body: form,
+                }).then(response => response.text())
                 .then(text => {
                     if (text == 'reload') {
                         window.location.reload();
@@ -2788,9 +2897,9 @@ function saveNote(id) {
     form.append("note", note);
 
     fetch(".//../controller/invoiceNoteUpdate.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -2836,9 +2945,9 @@ function addRootLocation() {
     });
 
     fetch(".//../controller/addRootLocation.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -2864,7 +2973,7 @@ function addRootLocation() {
                     li.setAttribute('data-city', city);
                     li.innerHTML = text; -
 
-                        document.getElementById('citiesList').appendChild(li);
+                    document.getElementById('citiesList').appendChild(li);
 
 
                     sortable('#citiesList', {
@@ -2884,33 +2993,100 @@ function addRootLocation() {
 
 }
 
+let selectedPriceType = 0;
+
 function showInvoiceContent() {
     let priceType = document.getElementById('priceType').value;
 
-    let form = new FormData();
-    form.append("priceType", priceType);
-
-    fetch(".//../controller/wholesaleInvoiceContent.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
-        .then(text => {
-
-            if (text == 'reload') {
-                window.location.reload();
-            } else {
-                document.getElementById('invoiceContent').innerHTML = text;
+        if(priceType == 0 || selectedPriceType == 0){
+            
+            let form = new FormData();
+            form.append("priceType", priceType);
+        
+            fetch(".//../controller/wholesaleInvoiceContent.php", {
+                    method: "POST",
+                    body: form,
+                }).then(response => response.text())
+                .then(text => {
+        
+                    if (text == 'reload') {
+                        window.location.reload();
+                    } else {
+                        document.getElementById('invoiceContent').innerHTML = text;
+                    }
+        
+                }).catch(error => {
+                    console.error('Fetch error:', error);
+                })
+            
+        }else{
+            
+            let form = new FormData();
+            form.append("priceType", priceType);
+            
+            var table = document.getElementById('invoiceTable');
+            var rows = table.tBodies[0].rows.length;
+            form.append("rows", rows);
+            
+            if (rows > 1) {
+                for (var x = 1; x < (rows); x++) {
+                    var id = table.tBodies[0].rows[x - 1].cells['0'].id;
+                    form.append("p" + x, id);
+                    form.append("sprice" + x, table.tBodies[0].rows[x - 1].cells['5'].innerHTML.toString().replaceAll(',', ''));
+    
+                }
             }
+             
+             fetch(".//../controller/changeOrderPriceType.php", {
+                        method: "POST",
+                        body: form,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        
+                        if (data.status == 'reload') {
+                            window.location.reload();
+                        } else {
+                            if(data.status == "success"){
+                                
+                                data.products.forEach(product => {
+                                    let cell5 = table.tBodies[0].rows[product.row - 1].cells[5];
 
-        }).catch(error => {
-            console.error('Fetch error:', error);
-        })
+                                    if (!cell5.classList.contains('text-danger')) {
+                                        cell5.innerHTML = Number(product.price).toLocaleString('en-US', {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        });
+                                        
+                                        let cell4 = table.tBodies[0].rows[product.row - 1].cells[4].innerHTML.toString().replaceAll(',', '');
+                                        let cell6 = table.tBodies[0].rows[product.row - 1].cells[6];
+                                        
+                                        cell6.innerHTML = Number(product.price * cell4).toLocaleString('en-US', {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        });
+                                        
+                                    }
+                                    
+
+                                });
+                                
+                                updateOrderSummery();
+                            }
+                        }
+                    }).catch(error => {
+                        console.error('Fetch error:', error);
+                    })
+            
+        }
+
+        selectedPriceType = priceType;
 }
 
 function addCategoryModalOpen() {
     fetch(".//../controller/addCategoryModalContent.php", {
-        method: "POST",
-    }).then(response => response.text())
+            method: "POST",
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -2935,9 +3111,9 @@ function addCategory() {
     form.append("name", name);
 
     fetch(".//../controller/addCategoryProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -2975,9 +3151,9 @@ function editCategoryModalOpen(id) {
     form.append("id", id);
 
     fetch(".//../controller/editCategoryModalContent.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -3003,9 +3179,9 @@ function editCategory(id) {
     form.append("name", name);
 
     fetch(".//../controller/editCategoryProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -3066,9 +3242,9 @@ function addUser() {
     startLoading();
 
     fetch(".//../controller/addUserProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             endLoading();
             if (text == 'success') {
@@ -3128,9 +3304,9 @@ function updateUser(id) {
     startLoading();
 
     fetch(".//../controller/updateUserProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             endLoading();
             if (text == 'success') {
@@ -3177,6 +3353,7 @@ function keyBlocker(event, type) {
 
     if (type == "price") {
         var charCode = (event.which) ? event.which : event.keyCode;
+
         if ((charCode > 47 && charCode < 58) || (charCode > 95 && charCode < 106) || charCode == 8 || charCode == 110 || charCode == 188) {
             return true;
         }
@@ -3209,9 +3386,9 @@ function DeleteOrderForm(id) {
             form.append("id", id);
 
             fetch(".//../controller/markAsDeleteProcess.php", {
-                method: "POST",
-                body: form,
-            }).then(response => response.text())
+                    method: "POST",
+                    body: form,
+                }).then(response => response.text())
                 .then(text => {
 
                     if (text == 'reload') {
@@ -3254,8 +3431,8 @@ function DeleteOrderForm(id) {
 
 function addSMSTemplateModalOpen() {
     fetch(".//../controller/addSMSTemplateModalContent.php", {
-        method: "POST",
-    }).then(response => response.text())
+            method: "POST",
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -3282,9 +3459,9 @@ function addSMSTemplate() {
     form.append("template", template);
 
     fetch(".//../controller/addSMSTemplateProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -3322,9 +3499,9 @@ function editSMSTemplateModalOpen(id) {
     form.append("id", id);
 
     fetch(".//../controller/editSMSTemplateModalContent.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -3352,9 +3529,9 @@ function editSMSTemplate(id) {
     form.append("template", template);
 
     fetch(".//../controller/editSMSTemplateProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -3392,9 +3569,9 @@ function updateSendSMSTemplate(element) {
     form.append("id", element.value);
 
     fetch(".//../controller/SMSTemplateContent.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
 
             if (text == 'reload') {
@@ -3422,9 +3599,9 @@ function addCity() {
     startLoading();
 
     fetch(".//../controller/addCityProcess.php", {
-        method: "POST",
-        body: form,
-    }).then(response => response.text())
+            method: "POST",
+            body: form,
+        }).then(response => response.text())
         .then(text => {
             endLoading();
             if (text == 'success') {
@@ -3464,6 +3641,7 @@ function UpdateOrderForm(id) {
 
         let note = document.getElementById("note").value;
         let priceType = document.getElementById('priceType').value;
+        let chequeTerm = document.getElementById('chequeTerm').value;
 
         var table = document.getElementById('invoiceTable');
         var rows = table.tBodies[0].rows.length;
@@ -3476,6 +3654,7 @@ function UpdateOrderForm(id) {
         form.append("rows", rows);
         form.append("note", note);
         form.append("priceType", priceType);
+        form.append("chequeTerm", chequeTerm);
         form.append("return_table_rows", return_table_rows);
 
 
@@ -3505,9 +3684,9 @@ function UpdateOrderForm(id) {
         }
 
         fetch(".//../controller/updateInvoiceProcess.php", {
-            method: "POST",
-            body: form,
-        }).then(response => response.text())
+                method: "POST",
+                body: form,
+            }).then(response => response.text())
             .then(text => {
                 if (text == 'reload') {
                     window.location.reload();

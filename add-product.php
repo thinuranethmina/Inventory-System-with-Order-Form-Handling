@@ -35,7 +35,7 @@ if (User::is_allow()) {
 
         <!-- quill css -->
         <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
+            
         <style>
             .pc-container {
                 background-image: url('assets/images/back-ground/blue-half.png');

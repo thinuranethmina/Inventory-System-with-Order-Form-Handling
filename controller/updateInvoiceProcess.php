@@ -3,11 +3,14 @@
 require "util/userStatus.php";
 
 if (User::is_allow()) {
+    
 
     if (!isset($_POST['priceType'])) {
         echo "Please select price type";
     } else if (empty(trim($_POST['priceType'])) || $_POST['priceType'] == '0') {
         echo "Please select price type";
+    } else if (!isset($_POST['chequeTerm'])) {
+        echo "Please select valid cheque term ";
     } elseif (!isset($_POST['rows']) && !isset($_POST['return_table_rows'])) {
         echo "You should add minimum one product";
     } else if ((empty(trim($_POST['rows'])) || !is_numeric($_POST['rows']) || empty(trim($_POST['return_table_rows'])) || !is_numeric($_POST['return_table_rows'])) && ($_POST['rows'] > 1 || $_POST['return_table_rows'] > 1)) {
@@ -27,13 +30,14 @@ if (User::is_allow()) {
             $balance = 0;
 
             if ($_SESSION['user']['user_type'] == 3 || $_SESSION['user']['user_type'] == 4) {
-                $$currentDateTime = new DateTime();
+                $currentDateTime = new DateTime();
                 $targetDateTime = new DateTime($invoice['date_time']);
 
                 $interval = $currentDateTime->diff($targetDateTime);
 
-                if ($interval->days >= 1) {
+                if ($interval->days >= 3) {
                     echo "Your time has been expired. Please contact system adminstratorfor any change of this order form.";
+                    return true;
                 } else {
                     $isReady = true;
                 }
@@ -159,7 +163,7 @@ if (User::is_allow()) {
                         Database::iud("UPDATE `invoice_payment` SET `balance` = ? WHERE `id` = ? ", "ss", [$balance, $payments['id']]);
                     }
 
-                    Database::iud("UPDATE `invoice` SET `discount` = ? ,`sub_total`=?,`total`=?,`note`=?,`is_credit`=?,`return_total`=?,`is_completed`=? WHERE `id` = ? ", "ssssssss", [$discount, $subTotal, $total, $note, $_POST['priceType'] == 2 ? "1" : "0", $returnTotal, $balance <= 0 ? "1" : "0",  $invoice_id]);
+                    Database::iud("UPDATE `invoice` SET `discount` = ? ,`sub_total`=?,`total`=?,`note`=?,`is_credit`=?,`return_total`=?,`is_completed`=?,`cheque_term_id`=? WHERE `id` = ? ", "sssssssss", [$discount, $subTotal, $total, $note, $_POST['priceType'] == 2 ? "1" : "0", $returnTotal, $balance <= 0 ? "1" : "0", $_POST['chequeTerm'],  $invoice_id]);
 
                     Database::iud("DELETE FROM `invoice_item` WHERE `invoice_id` = ?  ", "s", [$invoice_id]);
 

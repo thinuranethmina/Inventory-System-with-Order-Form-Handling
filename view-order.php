@@ -122,6 +122,17 @@ if (User::is_allow()) {
 
                                             <div class="row mt-2 mt-lg-5 mb-3 mb-lg-5">
                                                 <h4 class="text-center">Billing Items</h4>
+                                                <span>Price Type: 
+                                                    <?php
+                                                        
+                                                        if($invoice['shopID'] != 0 && $invoice['is_credit'] == '1'){
+                                                            echo "Credit";
+                                                        } else if($invoice['shopID'] != 0 && $invoice['is_credit'] == '0'){
+                                                            echo "Cash";
+                                                        }
+                                                        
+                                                    ?>
+                                                </span>
                                                 <div class="col-12">
                                                     <table id="invoiceTable" style="width:100%; font-size: 10px !important;">
                                                         <thead>
@@ -139,8 +150,13 @@ if (User::is_allow()) {
                                                             <?php
                                                             $invoice_item_rs = Database::search("SELECT * FROM `invoice_item` INNER JOIN `product` ON `product`.`id` = `invoice_item`.`product_id` WHERE `invoice_id` = ? ", "s", [$_GET['id']]);
 
+                                                            $invoiced_qty = 0;
+                                                            $free_qty = 0;
+
                                                             $x = 1;
                                                             while ($invoice_item = $invoice_item_rs->fetch_assoc()) {
+                                                            $invoiced_qty = $invoiced_qty + $invoice_item['qty'];
+                                                            $free_qty = $free_qty + $invoice_item['free_qty'];
                                                             ?>
                                                                 <tr>
                                                                     <td>
@@ -185,6 +201,8 @@ if (User::is_allow()) {
                                                 <?php
                                                 $invoice_return_item_rs = Database::search("SELECT * FROM `return_item` INNER JOIN `product` ON `product`.`id` = `return_item`.`product_id` WHERE `invoice_id` = ? ", "s", [$_GET['id']]);
 
+                                                $return_qty = 0;
+                                                                
                                                 if ($invoice_return_item_rs->num_rows > 0) {
                                                     $x = 1;
                                                 ?>
@@ -204,8 +222,10 @@ if (User::is_allow()) {
                                                             </thead>
                                                             <tbody>
                                                                 <?php
+                                                                
 
                                                                 while ($invoice_return_item = $invoice_return_item_rs->fetch_assoc()) {
+                                                                    $return_qty = $return_qty + $invoice_return_item['qty'];
                                                                 ?>
                                                                     <tr>
                                                                         <td>
@@ -254,6 +274,18 @@ if (User::is_allow()) {
                                                                     </td>
                                                                 </tr>
                                                                 <tr style="height: 8px !important;">
+                                                                    <td>Invoiced qty:</td>
+                                                                    <td><?= number_format($invoiced_qty) ?></td>
+                                                                </tr>
+                                                                <tr style="height: 8px !important;">
+                                                                    <td>Free qty:</td>
+                                                                    <td><?= number_format($free_qty) ?></td>
+                                                                </tr>
+                                                                <tr style="height: 8px !important;">
+                                                                    <td>Return qty:</td>
+                                                                    <td><?= number_format($return_qty) ?></td>
+                                                                </tr>
+                                                                <tr style="height: 8px !important;">
                                                                     <td>Return Items Total:</td>
                                                                     <td>Rs.<?= number_format($invoice['return_total'], 2) ?>/=</td>
                                                                 </tr>
@@ -280,6 +312,28 @@ if (User::is_allow()) {
                                                                     <td>Total:</td>
                                                                     <td>Rs.<?= number_format($invoice['total'], 2) ?>/=</td>
                                                                 </tr>
+                                                                
+                                                                <?php
+                                                                
+                                                                if($invoice['cheque_term_id'] != ''){
+                                                                    ?>
+                                                                    <tr style="height: 8px !important;">
+                                                                        <td colspan="2">
+                                                                                <?php
+                                                                                $cheque_term_rs = Database::search("SELECT * FROM `cheque_term`");
+                                        
+                                                                                    while ($cheque_term = $cheque_term_rs->fetch_assoc()) {
+                                                                                        echo $invoice['cheque_term_id'] == $cheque_term['id'] ? $cheque_term['name']:'';
+                                                                                    }
+                                        
+                                                                                ?>
+                                                                        </td>
+                                                                    </tr>
+                                                                <?php
+                                                                }
+                                                                
+                                                                ?>
+                                                                
 
                                                             </tbody>
                                                         </table>
